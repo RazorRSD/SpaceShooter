@@ -30,16 +30,15 @@ public class AboutScreen implements Screen {
         stage.addActor(table);
 
         // Create labels for about information
-        Label titleLabel = new Label("About Space Shooter", new Label.LabelStyle(createFont(40), Color.WHITE));
-        Label developerLabel = new Label("Developer: Your Name", new Label.LabelStyle(createFont(24), Color.WHITE));
-        Label versionLabel = new Label("Version: 1.0", new Label.LabelStyle(createFont(24), Color.WHITE));
-        Label descriptionLabel = new Label("Space Shooter is an exciting game where you defend Earth from alien invaders. " +
-                "Navigate through asteroid fields, upgrade your ship, and save the planet!",
+        Label titleLabel = new Label("Space Shooter", new Label.LabelStyle(createFont(60), Color.WHITE));
+        Label developerLabel = new Label("Sahan Bandara - 23014559", new Label.LabelStyle(createFont(30), Color.WHITE));
+        Label versionLabel = new Label("Version: 1.0", new Label.LabelStyle(createFont(40), Color.WHITE));
+        Label descriptionLabel = new Label("This game is created for assignment 02 - Advanced Mobile Development - COM640 by Sahan Bandara. Student Number: 23014559",
                 new Label.LabelStyle(createFont(30), Color.WHITE));
         descriptionLabel.setWrap(true);
 
         // Create back button
-        TextButton backButton = common.createLargeButton("Back", game.skin);
+        TextButton backButton = common.createPlasticButton("Back", game.skin);
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -52,8 +51,8 @@ public class AboutScreen implements Screen {
         table.add(titleLabel).padBottom(40).row();
         table.add(developerLabel).padBottom(20).row();
         table.add(versionLabel).padBottom(40).row();
-        table.add(descriptionLabel).width(Gdx.graphics.getWidth() * 0.8f).padBottom(40).row();
-        table.add(backButton).size(400, 200).row();
+        table.add(descriptionLabel).width(Gdx.graphics.getWidth() * 0.9f).padBottom(40).row();
+        table.add(backButton).size(400, 100).row();
 
         Gdx.input.setInputProcessor(stage);
     }

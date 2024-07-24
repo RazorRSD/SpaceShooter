@@ -1,5 +1,7 @@
 package com.sahan.spaceshooter.screens;
 
+import android.util.Log;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -19,6 +21,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.sahan.spaceshooter.SpaceShooterGameClass;
+import com.sahan.spaceshooter.data.GameDataManager;
+import com.sahan.spaceshooter.data.GameProgress;
+import com.sahan.spaceshooter.data.PlayerUpgrades;
 
 public class MenuScreen implements Screen {
 
@@ -31,17 +36,18 @@ public class MenuScreen implements Screen {
     private Texture unmuteTexture;
     private final ImageButton muteButton;
     private boolean isMuted = false;
+    private final GameDataManager gameDataManager;
 
     public MenuScreen(SpaceShooterGameClass game) {
         this.game = game;
         stage = new Stage(new ScreenViewport());
         Common common = new Common();
-
+        gameDataManager = new GameDataManager();
         try {
             backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("sfx/menu_loop.mp3"));
-            backgroundTexture = new Texture(Gdx.files.internal("ui/menuS_img/bg.jpg"));
-            muteTexture = new Texture(Gdx.files.internal("ui/menuS_img/mute.png"));
-            unmuteTexture = new Texture(Gdx.files.internal("ui/menuS_img/unmute.png"));
+            backgroundTexture = new Texture(Gdx.files.internal("ui/bgs/MenuBG.png"));
+            muteTexture = new Texture(Gdx.files.internal("ui/components/button/mute_btn/unmute.png"));
+            unmuteTexture = new Texture(Gdx.files.internal("ui/components/button/mute_btn/mute.png"));
         } catch (Exception e) {
             Gdx.app.error("MenuScreen", "Error loading assets", e);
         }
@@ -61,14 +67,32 @@ public class MenuScreen implements Screen {
         BitmapFont titleFont = common.createBoldFont(54);
         Label.LabelStyle titleStyle = new Label.LabelStyle(titleFont, Color.WHITE);
         Label titleLabel = new Label("Space Shooter", titleStyle);
-
-        TextButton startButton = common.createLargeButton("Start", game.skin);
-        TextButton workshopButton = common.createLargeButton("workshop", game.skin);
-        TextButton aboutButton = common.createLargeButton("About", game.skin);
-
         table.add(titleLabel).padBottom(50).padBottom(400).row();
 
-        table.add(startButton).size(600, 200).padBottom(20).row();
+        TextButton startButton;
+        TextButton continueButton;
+
+        if(gameDataManager.hasSavedGame()) {
+            continueButton = common.createPlasticButton("Continue", game.skin);
+            startButton = common.createPlasticButton("New Game", game.skin);
+            table.add(startButton).size(600, 200).padBottom(20).row();
+            table.add(continueButton).size(600, 200).padBottom(20).row();
+
+            continueButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    loadSavedGame();
+                    dispose();
+                }
+            });
+        }else {
+            startButton = common.createPlasticButton("Start", game.skin);
+            table.add(startButton).size(600, 200).padBottom(20).row();
+        }
+
+        TextButton workshopButton = common.createPlasticButton("workshop", game.skin);
+        TextButton aboutButton = common.createPlasticButton("About", game.skin);
+
         table.add(workshopButton).size(600, 200).padBottom(20).row();
         table.add(aboutButton).size(600, 200);
 
@@ -93,10 +117,18 @@ public class MenuScreen implements Screen {
             }
         });
 
+        workshopButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new WorkshopScreen(game));
+                dispose();
+            }
+        });
+
         startButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new GameScreen(game));
+                startNewGame();
                 dispose();
             }
         });
@@ -118,6 +150,18 @@ public class MenuScreen implements Screen {
 
         stage.addActor(muteButton);
         Gdx.input.setInputProcessor(stage);
+    }
+
+    public void loadSavedGame() {
+        GameProgress progress = gameDataManager.loadGameProgress();
+        Log.d("DataLoading","Data load" + progress.bank);
+        game.setScreen(new GameScreen(game, progress));
+    }
+
+    // Method to start a new game
+    public void startNewGame() {
+        GameProgress progress = new GameProgress("Asteroid Field", 0,0,3, 0, 0, new PlayerUpgrades());
+        game.setScreen(new GameScreen(game, progress));
     }
 
     @Override

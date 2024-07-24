@@ -41,7 +41,9 @@ public abstract class Enemy {
         collider = new CircleCollider(x + sprite.getWidth() / 2, y + sprite.getHeight() / 2, radius);
     }
 
-    public abstract void update(float delta);
+    public void update(float delta) {
+        collider.setPosition(position.x + sprite.getWidth() / 2, position.y + sprite.getHeight() / 2);
+    }
 
     public void draw(SpriteBatch batch) {
         sprite.setPosition(position.x, position.y);

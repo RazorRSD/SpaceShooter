@@ -4,10 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 
 public class Common {
@@ -28,6 +30,36 @@ public class Common {
         button.getLabel().setAlignment(Align.center);
 
         button.getStyle().font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+        return button;
+    }
+
+    public TextButton createPlasticButton(String text, Skin skin) {
+        // Create a new TextButton.TextButtonStyle
+        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
+
+        // Create NinePatch for button states
+        NinePatch upPatch = new NinePatch(new Texture("ui/components/button/button_up.png"), 12, 12, 12, 12);
+        NinePatch downPatch = new NinePatch(new Texture("ui/components/button/button_down.png"), 12, 12, 12, 12);
+        NinePatch overPatch = new NinePatch(new Texture("ui/components/button/button_over.png"), 12, 12, 12, 12);
+
+        // Set drawables for different button states
+        style.up = new NinePatchDrawable(upPatch);
+        style.down = new NinePatchDrawable(downPatch);
+        style.over = new NinePatchDrawable(overPatch);
+
+        // Create and set the font
+        style.font = createBoldFont(24);
+        style.fontColor = Color.WHITE;
+        style.downFontColor = Color.LIGHT_GRAY;
+
+        // Create the button
+        TextButton button = new TextButton(text, style);
+        button.setSize(300, 100);
+
+        // Set label properties
+        button.getLabel().setFontScale(2.0f);
+        button.getLabel().setAlignment(Align.center);
 
         return button;
     }

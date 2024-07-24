@@ -9,10 +9,14 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.sahan.spaceshooter.data.PlayerUpgrades;
 import com.sahan.spaceshooter.engine.CircleCollider;
+import com.sahan.spaceshooter.engine.GameState;
 import com.sahan.spaceshooter.sprites.bullets.Bullet;
 import com.sahan.spaceshooter.sprites.bullets.BulletEmission;
 import com.sahan.spaceshooter.sprites.bullets.BulletType;
+import com.sahan.spaceshooter.sprites.powerups.PowerUp;
+import com.sahan.spaceshooter.sprites.powerups.PowerUpType;
 
 public class Player {
     private final Sprite sprite;
@@ -23,8 +27,7 @@ public class Player {
     private float shootTimer;
     private float SHOOT_INTERVAL = 0.5f;
     private static final float MOVEMENT_THRESHOLD = 0.1f;
-    private int health;
-    private static final int MAX_HEALTH = 100;
+    private static int MAX_HEALTH = 100;
     private static final float THRUSTER_FRAME_DURATION = 0.1f;
     private static final float THRUSTER_SCALE = 8.0f;
     private static final float THRUSTER_FADE_DELAY = 0.3f; // 300ms delay
@@ -37,13 +40,13 @@ public class Player {
     private boolean blinking = false;
     private float blinkTimer = 0;
     private static final float BLINK_INTERVAL = 0.1f;
-    private int powerLevel;
-    private int powerBallCount;
     private BulletType currentBulletType;
-    private Animation<TextureRegion> powerBarAnimation;
     private float powerBarStateTime;
+    private final GameState gameState;
+    private PlayerUpgrades upgrades;
+    private String currentShip;
 
-    public Player(float x, float y) {
+    public Player(float x, float y, GameState gameState, PlayerUpgrades upgrades) {
         Texture texture;
         try {
             texture = new Texture(Gdx.files.internal("ui/sprites/player/player.png"));
@@ -57,7 +60,7 @@ public class Player {
         }
         sprite = new Sprite(texture);
         sprite.setScale(0.5f);
-        health = MAX_HEALTH;
+        this.gameState = gameState;
 
         position = new Vector2(x, y);
         lastPosition = new Vector2(x, y);
@@ -71,13 +74,26 @@ public class Player {
 
         initializeThrusterAnimation();
 
-        powerLevel = 0;
-        powerBallCount = 0;
         currentBulletType = BulletType.B1;
-        Texture powerBarTexture = new Texture("ui/sprites/powerups/powerupbar.png");
-        TextureRegion[][] tmp = TextureRegion.split(powerBarTexture, 48, 48);
-        powerBarAnimation = new Animation<>(0.1f, tmp[0]);
         powerBarStateTime = 0;
+
+        this.upgrades = upgrades;
+        this.currentShip = upgrades.ownedShips.first(); // Set to the first owned ship
+        updateStats();
+    }
+
+    private void updateStats() {
+        SHOOT_INTERVAL = 0.5f - (upgrades.weaponLevel * 0.05f);
+        MAX_HEALTH = 100 + (upgrades.shieldLevel * 20);
+        // Adjust movement speed based on engine level
+        // Adjust sprite based on currentShip
+    }
+
+    public void setShip(String shipType) {
+        if (upgrades.ownedShips.contains(shipType, false)) {
+            currentShip = shipType;
+            updateStats();
+        }
     }
 
     private void initializeThrusterAnimation() {
@@ -103,9 +119,9 @@ public class Player {
 
     public void takeDamage(int damage) {
         if (!invincible) {
-            health -= damage;
-            if (health < 0) {
-                health = 0;
+            gameState.setPlayerHealth(gameState.getPlayerHealth() - damage);
+            if (gameState.getPlayerHealth() < 0) {
+                gameState.setPlayerHealth(0);
             }
         }
     }
@@ -149,15 +165,15 @@ public class Player {
     }
 
     public boolean isAlive() {
-        return health > 0;
-    }
-
-    public int getHealth() {
-        return health;
+        return gameState.getPlayerHealth() > 0;
     }
 
     public void resetHealth() {
-        health = MAX_HEALTH;
+        gameState.setPlayerHealth(MAX_HEALTH);
+    }
+
+    public int getMaxHealth() {
+        return MAX_HEALTH;
     }
 
     public void setInvincible(boolean invincible) {
@@ -186,25 +202,23 @@ public class Player {
         if (!invincible || (invincible && sprite.getColor().a == 1)) {
             sprite.draw(batch);
         }
-
-        batch.draw(powerBarAnimation.getKeyFrame(powerBarStateTime, true), 10, 10);
     }
 
     public void increasePowerLevel() {
-        powerBallCount++;
-        if (powerBallCount >= 5) {
-            powerBallCount = 0;
-            powerLevel++;
-            if (powerLevel > 3) {
-                powerLevel = 0;
-                upgradeBulletType();
-            }
-            updateFireRate();
+        updateFireRate();
+    }
+
+    public void powerUpCollected(PowerUp powerUp) {
+
+        if(powerUp.getPowerUpType() == PowerUpType.COIN) {
+            gameState.addBank(10);
+        }else if(powerUp.getPowerUpType() == PowerUpType.POWER_UP){
+            gameState.collectedPowerUp(10);
         }
     }
 
     private void updateFireRate() {
-        SHOOT_INTERVAL = 0.5f - (powerLevel * 0.1f);
+        SHOOT_INTERVAL = 0.5f - (gameState.getPowerLevel() * 0.1f);
     }
 
     public void setPosition(float x, float y) {

@@ -112,6 +112,17 @@ public class EntityManager {
         explosions.removeAll(toRemoveExplosions, true);
     }
 
+    public void clearBullets() {
+        for (BulletEmission emission : playerBullets) {
+            emission.dispose();
+        }
+        playerBullets.clear();
+        for (BulletEmission emission : enemyBulletEmissions) {
+            emission.dispose();
+        }
+        enemyBulletEmissions.clear();
+    }
+
     // Getters and setters
     public Player getPlayer() { return player; }
     public void setPlayer(Player player) { this.player = player; }

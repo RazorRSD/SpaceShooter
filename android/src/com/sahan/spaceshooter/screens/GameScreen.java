@@ -1,13 +1,20 @@
 package com.sahan.spaceshooter.screens;
 
+import android.util.Log;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.sahan.spaceshooter.SpaceShooterGameClass;
+import com.sahan.spaceshooter.data.GameProgress;
 import com.sahan.spaceshooter.engine.*;
+import com.sahan.spaceshooter.missions.MissionManager;
 import com.sahan.spaceshooter.sprites.*;
 import com.sahan.spaceshooter.sprites.bullets.BulletEmission;
 import com.sahan.spaceshooter.sprites.enemies.*;
@@ -22,31 +29,33 @@ public class GameScreen implements Screen {
     private final EntityManager entityManager;
     private final CollisionHandler collisionHandler;
     private final EnemySpawner enemySpawner;
+    private final MissionManager missionManager;
 
-    private final BitmapFont font;
-    private int score;
-    private int lives;
-    private int bank;
-    private boolean gameOver;
+    private final GameState gameState;
+    private final ScrollingBackground background;
 
-    public GameScreen(SpaceShooterGameClass game) {
+    public GameScreen(SpaceShooterGameClass game, GameProgress gameProgress) {
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
         entityManager = new EntityManager();
-        entityManager.setPlayer(new Player(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 4f));
-
-        collisionHandler = new CollisionHandler(entityManager, game.assetManager);
         enemySpawner = new EnemySpawner(entityManager);
-
         touchPosition = new Vector3();
-
-        Common common = new Common();
-        font = common.createBoldFont(24);
-        score = 0;
-        lives = 3;
-        bank = 0;
+        collisionHandler = new CollisionHandler(entityManager, game.assetManager);
+        gameState = new GameState(game, entityManager);
+        missionManager = new MissionManager(entityManager, gameState);
+        gameState.setBank(gameProgress.bank);
+        gameState.setCurrentMission(gameProgress.completedMissions);
+        gameState.setScore(gameProgress.score);
+        gameState.setLives(gameProgress.lives);
+        gameState.setPowerLevel(gameProgress.powerLevel);
+        gameState.setPowerUpPoints(gameProgress.powerUpPoints);
+        Log.d("DataLoading","Game Screen : "+ gameState.getBank());
+        Texture backgroundTexture = new Texture("ui/bgs/missionBg_01.jpg");
+        backgroundTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+        background = new ScrollingBackground(backgroundTexture, 50);
+        entityManager.setPlayer(new Player(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 4f, gameState, gameProgress.upgrades));
+        gameState.setPlayer(entityManager.getPlayer());
     }
 
     @Override
@@ -60,7 +69,11 @@ public class GameScreen implements Screen {
         updateGame(delta);
 
         game.batch.begin();
-        entityManager.getPlayer().draw(game.batch);
+
+        background.render(game.batch);
+        background.update(delta);
+
+
         for (Enemy enemy : entityManager.getEnemies()) {
             enemy.draw(game.batch);
         }
@@ -77,51 +90,48 @@ public class GameScreen implements Screen {
             item.draw(game.batch);
         }
 
-        font.draw(game.batch, "Health: " + entityManager.getPlayer().getHealth(), 10, Gdx.graphics.getHeight() - 10);
-        font.draw(game.batch, "Lives: " + lives, (float) Gdx.graphics.getWidth() / 2 - 50, Gdx.graphics.getHeight() - 10);
-        font.draw(game.batch, "Score: " + score, Gdx.graphics.getWidth() - 500, Gdx.graphics.getHeight() - 10);
-        font.draw(game.batch, "Bank: " + bank, 10, Gdx.graphics.getHeight() - 50);
-
-        if (gameOver) {
-            font.draw(game.batch, "GAME OVER", (float) Gdx.graphics.getWidth() / 2 - 50, (float) Gdx.graphics.getHeight() / 2);
+        entityManager.getPlayer().draw(game.batch);
+        gameState.render(game.batch);
+        if (gameState.isShowingPopup()) {
+            gameState.getStage().act(Gdx.graphics.getDeltaTime());
+            gameState.getStage().draw();
         }
-
         game.batch.end();
     }
 
     private void handleInput() {
-        if (Gdx.input.isTouched()) {
-            touchPosition.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            camera.unproject(touchPosition);
-            Player player = entityManager.getPlayer();
-            float spriteWidth = player.getWidth();
-            float spriteHeight = player.getHeight();
+        if(!gameState.isShowingPopup()){
+            if (Gdx.input.isTouched()) {
+                touchPosition.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+                camera.unproject(touchPosition);
+                Player player = entityManager.getPlayer();
+                float spriteWidth = player.getWidth();
+                float spriteHeight = player.getHeight();
 
-            // Calculate new position
-            float newX = touchPosition.x - spriteWidth;
-            float newY = touchPosition.y - spriteHeight;
+                float newX = touchPosition.x - spriteWidth;
+                float newY = touchPosition.y - spriteHeight;
 
-            // Restrict X position
-            newX = Math.max(-spriteWidth/2f, newX);
-            newX = Math.min(camera.viewportWidth - (player.getWidth() + 100), newX);
+                newX = Math.max(-spriteWidth/2f, newX);
+                newX = Math.min(camera.viewportWidth - (player.getWidth() + 100), newX);
 
-            // Restrict Y position
-            newY = Math.max(-spriteHeight/2f, Math.min(newY, Gdx.graphics.getHeight()));
+                newY = Math.max(-spriteHeight/2f, Math.min(newY, Gdx.graphics.getHeight()));
 
-            if (player.canShoot()) {
-                entityManager.getPlayerBullets().add(player.shoot());
+                if (player.canShoot()) {
+                    entityManager.getPlayerBullets().add(player.shoot());
+                }
+
+                player.setPosition(newX, newY);
             }
-
-            player.setPosition(newX, newY);
         }
     }
 
     private void updateGame(float delta) {
-        if (!gameOver) {
+        if (!gameState.isGameOver()) {
             entityManager.update(delta);
             enemySpawner.update(delta);
-            handleInput();
             collisionHandler.checkCollisions();
+            missionManager.update(delta);
+            handleInput();
             updateScore();
             updateBank();
             checkGameOver();
@@ -131,7 +141,7 @@ public class GameScreen implements Screen {
     private void updateScore() {
         for (Enemy enemy : entityManager.getEnemies()) {
             if (enemy.isDestroyed()) {
-                score += enemy.getScore();
+                gameState.addScore(enemy.getScore());
             }
         }
     }
@@ -139,21 +149,21 @@ public class GameScreen implements Screen {
     private void updateBank() {
         for (PowerUp powerUp : entityManager.getPowerUps()) {
             if (powerUp.isCollected() && powerUp.getPowerUpType() == PowerUpType.COIN) {
-                bank += 5;
+                gameState.addBank(5);
             }
         }
     }
 
     private void checkGameOver() {
         Player player = entityManager.getPlayer();
-        if (player.getHealth() <= 0) {
-            lives--;
-            if (lives > 0) {
+        if (!player.isAlive()) {
+            gameState.setLives(gameState.getLives() - 1);
+            if (gameState.getLives() > 0) {
                 player.resetHealth();
                 player.setInvincible(true);
                 player.startBlinking();
             } else {
-                gameOver = true;
+                gameState.setGameOver(true);
             }
         }
     }
@@ -178,6 +188,7 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         entityManager.dispose();
-        font.dispose();
+        background.dispose();
+        gameState.dispose();
     }
 }

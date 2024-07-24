@@ -22,17 +22,17 @@ public class EnemyTypes {
             collider = new CircleCollider(x + sprite.getWidth() / 2, y + sprite.getHeight() / 2, radius);
         }
 
-        @Override
-        public void update(float delta) {
-            position.add(velocity.x * delta, velocity.y * delta);
-            if (position.x < 0 || position.x > Gdx.graphics.getWidth() - getWidth()) {
-                velocity.x = -velocity.x;
-            }
-            if (position.y < -getHeight()) {
-                markForRemoval();
-            }
-            collider.setPosition(position.x + sprite.getWidth() / 2, position.y + sprite.getHeight() / 2);
-        }
+//        @Override
+//        public void update(float delta) {
+//            position.add(velocity.x * delta, velocity.y * delta);
+//            if (position.x < 0 || position.x > Gdx.graphics.getWidth() - getWidth()) {
+//                velocity.x = -velocity.x;
+//            }
+//            if (position.y < -getHeight()) {
+//                markForRemoval();
+//            }
+//            collider.setPosition(position.x + sprite.getWidth() / 2, position.y + sprite.getHeight() / 2);
+//        }
 
         @Override
         public BulletEmission shoot() {
@@ -52,17 +52,17 @@ public class EnemyTypes {
             collider = new CircleCollider(x + sprite.getWidth() / 2, y + sprite.getHeight() / 2, radius);
         }
 
-        @Override
-        public void update(float delta) {
-            position.add(velocity.x * delta, velocity.y * delta);
-            if (position.x < 0 || position.x > Gdx.graphics.getWidth() - getWidth()) {
-                velocity.x = -velocity.x;
-            }
-            if (position.y < -getHeight()) {
-                markForRemoval();
-            }
-            collider.setPosition(position.x + sprite.getWidth() / 2, position.y + sprite.getHeight() / 2);
-        }
+//        @Override
+//        public void update(float delta) {
+//            position.add(velocity.x * delta, velocity.y * delta);
+//            if (position.x < 0 || position.x > Gdx.graphics.getWidth() - getWidth()) {
+//                velocity.x = -velocity.x;
+//            }
+//            if (position.y < -getHeight()) {
+//                markForRemoval();
+//            }
+//            collider.setPosition(position.x + sprite.getWidth() / 2, position.y + sprite.getHeight() / 2);
+//        }
 
         @Override
         public BulletEmission shoot() {
@@ -80,17 +80,17 @@ public class EnemyTypes {
             collider = new CircleCollider(x + sprite.getWidth() / 2, y + sprite.getHeight() / 2, radius);
         }
 
-        @Override
-        public void update(float delta) {
-            position.add(velocity.x * delta, velocity.y * delta);
-            if (position.x < 0 || position.x > Gdx.graphics.getWidth() - getWidth()) {
-                velocity.x = -velocity.x;
-            }
-            if (position.y < -getHeight()) {
-                markForRemoval();
-            }
-            collider.setPosition(position.x + sprite.getWidth() / 2, position.y + sprite.getHeight() / 2);
-        }
+//        @Override
+//        public void update(float delta) {
+//            position.add(velocity.x * delta, velocity.y * delta);
+//            if (position.x < 0 || position.x > Gdx.graphics.getWidth() - getWidth()) {
+//                velocity.x = -velocity.x;
+//            }
+//            if (position.y < -getHeight()) {
+//                markForRemoval();
+//            }
+//            collider.setPosition(position.x + sprite.getWidth() / 2, position.y + sprite.getHeight() / 2);
+//        }
 
         @Override
         public BulletEmission shoot() {
@@ -110,17 +110,17 @@ public class EnemyTypes {
             collider = new CircleCollider(x + sprite.getWidth() / 2, y + sprite.getHeight() / 2, radius);
         }
 
-        @Override
-        public void update(float delta) {
-            position.add(velocity.x * delta, velocity.y * delta);
-            if (position.x < 0 || position.x > Gdx.graphics.getWidth() - getWidth()) {
-                velocity.x = -velocity.x;
-            }
-            if (position.y < -getHeight()) {
-                markForRemoval();
-            }
-            collider.setPosition(position.x + sprite.getWidth() / 2, position.y + sprite.getHeight() / 2);
-        }
+//        @Override
+//        public void update(float delta) {
+//            position.add(velocity.x * delta, velocity.y * delta);
+//            if (position.x < 0 || position.x > Gdx.graphics.getWidth() - getWidth()) {
+//                velocity.x = -velocity.x;
+//            }
+//            if (position.y < -getHeight()) {
+//                markForRemoval();
+//            }
+//            collider.setPosition(position.x + sprite.getWidth() / 2, position.y + sprite.getHeight() / 2);
+//        }
 
         @Override
         public BulletEmission shoot() {
@@ -145,24 +145,24 @@ public class EnemyTypes {
             collider = new CircleCollider(x + sprite.getWidth() / 2, y + sprite.getHeight() / 2, radius);
         }
 
-        @Override
-        public void update(float delta) {
-            if (position.dst(centerPoint) > 10) {
-                position.add(velocity.x * delta, velocity.y * delta);
-            } else {
-                movementTimer += delta;
-                if (movementTimer >= MOVEMENT_INTERVAL) {
-                    velocity.set(MathUtils.random(-30, 30), MathUtils.random(-30, 30));
-                    movementTimer = 0;
-                }
-                position.add(velocity.x * delta, velocity.y * delta);
-
-                // Keep the boss on screen
-                position.x = MathUtils.clamp(position.x, 0, Gdx.graphics.getWidth() - getWidth());
-                position.y = MathUtils.clamp(position.y, (float) Gdx.graphics.getHeight() / 2, Gdx.graphics.getHeight() - getHeight());
-            }
-            collider.setPosition(position.x + sprite.getWidth() / 2, position.y + sprite.getHeight() / 2);
-        }
+//        @Override
+//        public void update(float delta) {
+//            if (position.dst(centerPoint) > 10) {
+//                position.add(velocity.x * delta, velocity.y * delta);
+//            } else {
+//                movementTimer += delta;
+//                if (movementTimer >= MOVEMENT_INTERVAL) {
+//                    velocity.set(MathUtils.random(-30, 30), MathUtils.random(-30, 30));
+//                    movementTimer = 0;
+//                }
+//                position.add(velocity.x * delta, velocity.y * delta);
+//
+//                // Keep the boss on screen
+//                position.x = MathUtils.clamp(position.x, 0, Gdx.graphics.getWidth() - getWidth());
+//                position.y = MathUtils.clamp(position.y, (float) Gdx.graphics.getHeight() / 2, Gdx.graphics.getHeight() - getHeight());
+//            }
+//            collider.setPosition(position.x + sprite.getWidth() / 2, position.y + sprite.getHeight() / 2);
+//        }
 
         @Override
         public BulletEmission shoot() {

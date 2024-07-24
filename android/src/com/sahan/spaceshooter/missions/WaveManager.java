@@ -1,8 +1,9 @@
-package com.sahan.spaceshooter.engine;
+package com.sahan.spaceshooter.missions;
 
 import com.badlogic.gdx.utils.Array;
+import com.sahan.spaceshooter.engine.EntityManager;
+import com.sahan.spaceshooter.engine.GameState;
 import com.sahan.spaceshooter.sprites.enemies.Enemy;
-import com.sahan.spaceshooter.missions.WaveCollection;
 
 public class WaveManager {
     private final EntityManager entityManager;
@@ -35,13 +36,13 @@ public class WaveManager {
 
         switch (gameState.getCurrentWave()) {
             case 1:
-                WaveCollection.spawnWave1(entityManager, currentWaveEnemies);
+                WaveCollection.spawnWave1(entityManager);
                 break;
             case 2:
-                WaveCollection.spawnWave2(entityManager, currentWaveEnemies);
+                WaveCollection.spawnWave2(entityManager);
                 break;
             case 3:
-                WaveCollection.spawnWave3(entityManager, currentWaveEnemies);
+                WaveCollection.spawnWave3(entityManager);
                 break;
             default:
                 // You can add more waves or loop back to the first wave
@@ -68,13 +69,13 @@ public class WaveManager {
         // Update enemy behaviors based on the current wave
         switch (gameState.getCurrentWave()) {
             case 1:
-                WaveCollection.updateWave1(currentWaveEnemies, delta);
+                WaveCollection.updateWave1(currentWaveEnemies);
                 break;
             case 2:
-                WaveCollection.updateWave2(currentWaveEnemies, delta, waveTimer);
+                WaveCollection.updateWave2(currentWaveEnemies);
                 break;
             case 3:
-                WaveCollection.updateWave3(currentWaveEnemies, delta);
+                WaveCollection.updateWave3(currentWaveEnemies);
                 break;
         }
     }

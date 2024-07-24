@@ -3,7 +3,6 @@ package com.sahan.spaceshooter.engine;
 import android.util.Log;
 
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.math.Rectangle;
 import com.sahan.spaceshooter.sprites.Player;
 import com.sahan.spaceshooter.sprites.bullets.Bullet;
 import com.sahan.spaceshooter.sprites.bullets.BulletEmission;
@@ -101,7 +100,7 @@ public class CollisionHandler {
         Player player = entityManager.getPlayer();
         for (PowerUp powerUp: entityManager.getPowerUps()) {
             if(powerUp.getCollider().overlaps(player.getCollider())){
-                Log.d("Collision", "powerup collid");
+                player.powerUpCollected(powerUp);
                 powerUp.setCollected();
             }
         }

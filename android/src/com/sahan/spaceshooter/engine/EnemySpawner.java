@@ -18,7 +18,7 @@ public class EnemySpawner {
     public void update(float delta) {
         enemySpawnTimer += delta;
         if (enemySpawnTimer >= ENEMY_SPAWN_INTERVAL) {
-            spawnEnemy();
+//            spawnEnemy();
             enemySpawnTimer = 0;
         }
     }
