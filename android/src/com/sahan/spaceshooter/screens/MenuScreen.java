@@ -118,7 +118,7 @@ public class MenuScreen implements Screen {
         backgroundSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         backgroundMusic.setLooping(true);
-        backgroundMusic.setVolume(0.5f);  // Adjust volume as needed
+        backgroundMusic.setVolume(0.5f);
         backgroundMusic.play();
 
         muteButton.addListener(new ChangeListener() {
@@ -129,7 +129,7 @@ public class MenuScreen implements Screen {
                     backgroundMusic.setVolume(0f);
                     muteButton.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(muteTexture));
                 } else {
-                    backgroundMusic.setVolume(0.5f);  // Or whatever volume you prefer
+                    backgroundMusic.setVolume(0.5f);
                     muteButton.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(unmuteTexture));
                 }
             }
@@ -169,7 +169,6 @@ public class MenuScreen implements Screen {
         game.setScreen(new GameScreen(game, progress));
     }
 
-    // Method to start a new game
     public void startNewGame() {
         GameProgress progress = new GameProgress("Asteroid Field", 0,0,3, 0, 0, new PlayerUpgrades());
         game.setScreen(new GameScreen(game, progress));

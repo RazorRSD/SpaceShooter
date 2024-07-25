@@ -105,7 +105,6 @@ public class GameState {
 
         currentDialog = new Dialog("", game.skin);
 
-//        currentDialog.setBackground(null);
         currentDialog.pad(0);
 
         Texture backgroundTexture = new Texture(Gdx.files.internal("ui/menuS_img/bg.jpg"));
@@ -127,7 +126,6 @@ public class GameState {
                 public void changed(ChangeEvent event, Actor actor) {
                     Log.d("POPUP", "Popup button clicked");
                     missionManager.proceedToNextMission();
-//                    currentDialog.result("next");
                 }
             });
             buttonTable.add(nextButton).size(400, 100).pad(20);
@@ -200,9 +198,9 @@ public class GameState {
             return;
         }
 
-        float barWidth = Gdx.graphics.getWidth() - 20; // 10px padding on each side
+        float barWidth = Gdx.graphics.getWidth() - 20;
         float barHeight = 80;
-        float barY = Gdx.graphics.getHeight() - barHeight - 10; // 10px from top of screen
+        float barY = Gdx.graphics.getHeight() - barHeight - 10;
         float sectionWidth = barWidth / 3;
 
         batch.draw(statBarRegion, 10, barY, barWidth, barHeight);
@@ -214,12 +212,10 @@ public class GameState {
         batch.draw(heartIconTexture, heartX, iconY, iconSize, iconSize);
         font.draw(batch, "x " + lives, heartX + iconSize + 10, barY + barHeight / 2 + font.getCapHeight() / 2);
 
-        // Draw score section
         float scoreX = 20 + sectionWidth;
         batch.draw(scoreIconTexture, scoreX, iconY, iconSize, iconSize);
         font.draw(batch, ": " + score, scoreX + iconSize + 10, barY + barHeight / 2 + font.getCapHeight() / 2);
 
-        // Draw bank section
         float bankX = 20 + 2 * sectionWidth;
         batch.draw(bankIconTexture, bankX, iconY, iconSize, iconSize);
         font.draw(batch, ": " + bank, bankX + iconSize + 10, barY + barHeight / 2 + font.getCapHeight() / 2);
@@ -231,10 +227,9 @@ public class GameState {
         float waveNumberHeight = 150;
         float padding = 10;
         float waveNumberX = Gdx.graphics.getWidth() - waveNumberWidth - padding;
-        float waveNumberY = Gdx.graphics.getHeight() - 80 - waveNumberHeight - padding * 2; // Position below stat bar
+        float waveNumberY = Gdx.graphics.getHeight() - 80 - waveNumberHeight - padding * 2;
 
         batch.draw(waveNumberTexture, waveNumberX, waveNumberY, waveNumberWidth, waveNumberHeight);
-        // Draw wave number
 
         String waveText = String.valueOf(currentWave);
         float textWidth = font.getScaleX();
@@ -312,7 +307,6 @@ public class GameState {
             Player player = entityManager.getPlayer();
             player.increasePowerLevel();
             powerLevel++;
-            // You might want to add some effect or sound here to indicate level up
         }
     }
 

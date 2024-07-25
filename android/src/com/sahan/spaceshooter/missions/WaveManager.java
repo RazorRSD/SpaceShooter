@@ -45,7 +45,7 @@ public class WaveManager {
                 WaveCollection.spawnWave3(entityManager);
                 break;
             default:
-                // You can add more waves or loop back to the first wave
+
                 break;
         }
     }
@@ -53,7 +53,7 @@ public class WaveManager {
     private void updateCurrentWave(float delta) {
         waveTimer += delta;
 
-        // Check if all enemies in the current wave are destroyed
+
         boolean allEnemiesDestroyed = true;
         for (Enemy enemy : currentWaveEnemies) {
             if (!enemy.isDestroyed()) {
@@ -66,7 +66,7 @@ public class WaveManager {
             waveInProgress = false;
         }
 
-        // Update enemy behaviors based on the current wave
+
         switch (gameState.getCurrentWave()) {
             case 1:
                 WaveCollection.updateWave1(currentWaveEnemies);

@@ -19,7 +19,7 @@ public class Common {
         style.down = skin.newDrawable("white", Color.CYAN);
         style.over = skin.newDrawable("white", Color.ROYAL);
 
-        BitmapFont boldFont = createBoldFont(24); // Use 24 for button text size
+        BitmapFont boldFont = createBoldFont(24);
         style.font = boldFont;
 
         TextButton button = new TextButton(text, style);
@@ -35,29 +35,23 @@ public class Common {
     }
 
     public TextButton createPlasticButton(String text, Skin skin) {
-        // Create a new TextButton.TextButtonStyle
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
 
-        // Create NinePatch for button states
         NinePatch upPatch = new NinePatch(new Texture("ui/components/button/button_up.png"), 12, 12, 12, 12);
         NinePatch downPatch = new NinePatch(new Texture("ui/components/button/button_down.png"), 12, 12, 12, 12);
         NinePatch overPatch = new NinePatch(new Texture("ui/components/button/button_over.png"), 12, 12, 12, 12);
 
-        // Set drawables for different button states
         style.up = new NinePatchDrawable(upPatch);
         style.down = new NinePatchDrawable(downPatch);
         style.over = new NinePatchDrawable(overPatch);
 
-        // Create and set the font
         style.font = createBoldFont(24);
         style.fontColor = Color.WHITE;
         style.downFontColor = Color.LIGHT_GRAY;
 
-        // Create the button
         TextButton button = new TextButton(text, style);
         button.setSize(300, 100);
 
-        // Set label properties
         button.getLabel().setFontScale(2.0f);
         button.getLabel().setAlignment(Align.center);
 
@@ -68,7 +62,7 @@ public class Common {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("ui/fonts/font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = size;
-        parameter.borderWidth = 2; // This makes the font bold
+        parameter.borderWidth = 2;
         BitmapFont boldFont = generator.generateFont(parameter);
         generator.dispose();
         return boldFont;

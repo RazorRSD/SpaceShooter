@@ -86,7 +86,7 @@ public class WaveCollection {
         float centerX = Gdx.graphics.getWidth() / 2f;
         float centerY = Gdx.graphics.getHeight() / 2f;
         float radius = 150f;
-        float angularSpeed = MathUtils.PI / 2; // Half a circle per second
+        float angularSpeed = MathUtils.PI / 2;
 
         for (int i = 0; i < enemies.size; i++) {
             Enemy enemy = enemies.get(i);

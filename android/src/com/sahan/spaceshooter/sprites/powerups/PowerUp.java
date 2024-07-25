@@ -24,7 +24,7 @@ public abstract class PowerUp {
     }
 
     public void update(float delta) {
-        position.y -= 100 * delta; // Move downwards
+        position.y -= 100 * delta;
         if (position.y < -sprite.getHeight()) {
             active = false;
         }

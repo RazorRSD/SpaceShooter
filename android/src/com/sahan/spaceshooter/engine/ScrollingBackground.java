@@ -43,13 +43,11 @@ public class ScrollingBackground {
         this.yScroll = 0;
         this.planets = new Array<>();
 
-        // Setup background
         TextureRegion tempRegion = new TextureRegion(backgroundTexture);
         backgroundRegion = new TextureRegion(backgroundTexture);
         backgroundRegion.setRegion(tempRegion);
         backgroundRegion.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
-        // Adjust background region to fit screen aspect ratio
         float regionAspectRatio = (float)backgroundRegion.getRegionWidth() / (float)backgroundRegion.getRegionHeight();
         float screenAspectRatio = (float)screenWidth / (float)screenHeight;
 
@@ -69,7 +67,6 @@ public class ScrollingBackground {
             );
         }
 
-        // Initialize planets
         initializePlanets();
     }
 
@@ -90,7 +87,6 @@ public class ScrollingBackground {
             }
         }
 
-        // Ensure we have at least one planet
         if (planets.size == 0) {
             Gdx.app.error("ScrollingBackground", "No planet textures could be loaded. Using fallback texture.");
             Texture fallbackTexture = createFallbackTexture();
@@ -101,7 +97,7 @@ public class ScrollingBackground {
 
     private Texture createFallbackTexture() {
         Pixmap pixmap = new Pixmap(64, 64, Pixmap.Format.RGB888);
-        pixmap.setColor(Color.PURPLE); // You can change this color as needed
+        pixmap.setColor(Color.PURPLE);
         pixmap.fill();
         Texture fallbackTexture = new Texture(pixmap);
         pixmap.dispose();
@@ -119,7 +115,6 @@ public class ScrollingBackground {
             x = screenWidth - planetRegion.getRegionWidth() * scale * MathUtils.random(0.3f, 0.7f);
         }
 
-        // Find a non-overlapping y position
         y = findNonOverlappingYPosition(planetRegion, scale, isLeftSide);
 
         planets.add(new Planet(planetRegion, x, y, scale, isLeftSide));
@@ -148,7 +143,7 @@ public class ScrollingBackground {
             attempts++;
             if (attempts >= MAX_ATTEMPTS) {
                 Gdx.app.log("ScrollingBackground", "Could not find non-overlapping position after " + MAX_ATTEMPTS + " attempts");
-                return screenHeight + planetHeight; // Place it above the screen as a last resort
+                return screenHeight + planetHeight;
             }
         } while (overlaps);
 
@@ -163,7 +158,6 @@ public class ScrollingBackground {
 
         Array<Planet> planetsToReset = new Array<>();
 
-        // Update planets
         for (Planet planet : planets) {
             planet.y -= planetScrollSpeed * deltaTime;
             if (planet.y + planet.visibleHeight < 0) {
@@ -171,12 +165,10 @@ public class ScrollingBackground {
             }
         }
 
-        // Reset planets that have gone off screen
         for (Planet planet : planetsToReset) {
             resetPlanet(planet);
         }
 
-        // Ensure we always have at least one planet
         if (planets.size < 1) {
             addPlanet(planets.first().region);
         }
@@ -197,7 +189,6 @@ public class ScrollingBackground {
         batch.draw(backgroundRegion, 0, -yScroll, screenWidth, screenHeight);
         batch.draw(backgroundRegion, 0, -yScroll + screenHeight, screenWidth, screenHeight);
 
-        // Draw planets
         for (Planet planet : planets) {
             batch.draw(planet.region, planet.x, planet.y,
                     planet.region.getRegionWidth() * planet.scale,

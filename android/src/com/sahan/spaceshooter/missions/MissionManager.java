@@ -43,12 +43,10 @@ public class MissionManager {
         MissionCollection.Mission currentMission = missions.get(currentMissionIndex);
 
         if (currentWaveIndex >= currentMission.waves.size) {
-            // Mission complete, move to next mission
             currentMissionIndex++;
             currentWaveIndex = -1;
 
             if (currentMissionIndex >= missions.size) {
-                // All missions complete
                 gameState.setGameOver(true);
                 return;
             }
@@ -69,10 +67,8 @@ public class MissionManager {
 
         currentWave.updateMethod.run();
 
-        // Check if all enemies are destroyed
         if (entityManager.getEnemies().size == 0) {
             if (currentWaveIndex == missions.get(currentMissionIndex).waves.size - 1) {
-                // Last wave of the mission
                 missionCompleteSequence = true;
             } else {
                 waveInProgress = false;
@@ -98,10 +94,9 @@ public class MissionManager {
     }
 
     public void proceedToNextMission() {
-        // Clear current mission data
+
         entityManager.clearBullets();
 
-        // Increment mission index or handle game completion
         currentMissionIndex++;
         if (currentMissionIndex >= missions.size) {
             gameState.setGameOver(true);
@@ -111,13 +106,11 @@ public class MissionManager {
             waveInProgress = false;
             gameState.hideMissionCompletePopup();
             gameState.setCurrentMission(missions.get(currentMissionIndex).name);
-            // Reset player position or perform any other necessary setup
             entityManager.getPlayer().setPosition(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 4f);
         }
     }
 
     private void movePlayerOffScreen() {
-        // Move player towards the top of the screen
         float currentY = entityManager.getPlayer().getPosition().y;
         float newY = currentY + 500 * Gdx.graphics.getDeltaTime();
         entityManager.getPlayer().setPosition(entityManager.getPlayer().getPosition().x, newY);

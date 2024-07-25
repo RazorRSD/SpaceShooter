@@ -123,7 +123,6 @@ public class EntityManager {
         enemyBulletEmissions.clear();
     }
 
-    // Getters and setters
     public Player getPlayer() { return player; }
     public void setPlayer(Player player) { this.player = player; }
     public Array<BulletEmission> getPlayerBullets() { return playerBullets; }

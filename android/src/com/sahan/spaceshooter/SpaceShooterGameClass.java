@@ -19,10 +19,8 @@ public class SpaceShooterGameClass extends Game {
 		skin = new Skin(Gdx.files.internal("ui/skin/uiskin.json"));
 		assetManager = new AssetManager();
 
-		// Queue sound assets for loading
 		assetManager.load("sfx/explosion.wav", Sound.class);
 
-		// Set the loading screen
 		setScreen(new LoadingScreen(this));
 	}
 

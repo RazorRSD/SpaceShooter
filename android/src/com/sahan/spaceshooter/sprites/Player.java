@@ -85,8 +85,6 @@ public class Player {
     private void updateStats() {
         SHOOT_INTERVAL = 0.5f - (upgrades.weaponLevel * 0.05f);
         MAX_HEALTH = 100 + (upgrades.shieldLevel * 20);
-        // Adjust movement speed based on engine level
-        // Adjust sprite based on currentShip
     }
 
     public void setShip(String shipType) {

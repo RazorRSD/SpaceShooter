@@ -33,28 +33,22 @@ public class HelpScreen implements Screen {
         table.setFillParent(true);
         stage.addActor(table);
 
-        // Load textures
         backgroundTexture = new Texture(Gdx.files.internal("ui/bgs/MenuBG.png"));
         playerShipTexture = new Texture(Gdx.files.internal("ui/sprites/player/player.png"));
         enemyShipTexture = new Texture(Gdx.files.internal("ui/sprites/enemies/enemy_basic.png"));
         powerUpTexture = new Texture(Gdx.files.internal("ui/sprites/powerups/powerup.png"));
 
-        // Create title
         BitmapFont titleFont = common.createBoldFont(54);
         Label.LabelStyle titleStyle = new Label.LabelStyle(titleFont, com.badlogic.gdx.graphics.Color.WHITE);
         Label titleLabel = new Label("How to Play", titleStyle);
         table.add(titleLabel).colspan(2).pad(20).row();
 
-        // Player ship instructions
         addInstructionRow(table, playerShipTexture, "This is your ship. Move it by touching the screen.");
 
-        // Enemy ship instructions
         addInstructionRow(table, enemyShipTexture, "These are enemy ships. Avoid or destroy them!");
 
-        // Power-up instructions
         addInstructionRow(table, powerUpTexture, "Collect power-ups to increase your strength!");
 
-        // Add back button
         TextButton backButton = common.createPlasticButton("Back", game.skin);
         backButton.addListener(new ChangeListener() {
             @Override

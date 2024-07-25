@@ -29,7 +29,6 @@ public class AboutScreen implements Screen {
         table.setFillParent(true);
         stage.addActor(table);
 
-        // Create labels for about information
         Label titleLabel = new Label("Space Shooter", new Label.LabelStyle(createFont(60), Color.WHITE));
         Label developerLabel = new Label("Sahan Bandara - 23014559", new Label.LabelStyle(createFont(30), Color.WHITE));
         Label versionLabel = new Label("Version: 1.0", new Label.LabelStyle(createFont(40), Color.WHITE));
@@ -37,7 +36,6 @@ public class AboutScreen implements Screen {
                 new Label.LabelStyle(createFont(30), Color.WHITE));
         descriptionLabel.setWrap(true);
 
-        // Create back button
         TextButton backButton = common.createPlasticButton("Back", game.skin);
         backButton.addListener(new ChangeListener() {
             @Override
@@ -47,7 +45,6 @@ public class AboutScreen implements Screen {
             }
         });
 
-        // Add elements to table
         table.add(titleLabel).padBottom(40).row();
         table.add(developerLabel).padBottom(20).row();
         table.add(versionLabel).padBottom(40).row();

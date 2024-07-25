@@ -43,7 +43,6 @@ public class Explosion {
 
         if (explosionSound == null) {
             try {
-                // If WAV fails, try MP3
                 explosionSound = Gdx.audio.newSound(Gdx.files.internal("sfx/menu_loop.mp3"));
                 Gdx.app.log("Explosion", "Explosion MP3 sound loaded successfully");
             } catch (Exception e2) {
@@ -58,7 +57,7 @@ public class Explosion {
 
         if (!soundPlayed && assetManager.isLoaded("sfx/explosion.wav")) {
             Sound explosionSound = assetManager.get("sfx/explosion.wav", Sound.class);
-            long soundId = explosionSound.play(0.5f); // Play at full volume
+            long soundId = explosionSound.play(0.5f);
             Gdx.app.log("Explosion", "Playing explosion sound, ID: " + soundId);
             soundPlayed = true;
         }

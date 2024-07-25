@@ -47,28 +47,22 @@ public class WorkshopScreen implements Screen {
         Table mainTable = new Table();
         mainTable.setFillParent(true);
 
-        // Load and set background
         Texture backgroundTexture = new Texture(Gdx.files.internal("ui/shop/window.png"));
         TextureRegionDrawable background = new TextureRegionDrawable(new TextureRegion(backgroundTexture));
         mainTable.setBackground(background);
 
-        // Title
         Label titleLabel = new Label("Workshop", new Label.LabelStyle(common.createBoldFont(48), com.badlogic.gdx.graphics.Color.WHITE));
         mainTable.add(titleLabel).expandX().center().padTop(50).row();
 
-        // Bank display
         bankLabel = new Label("Bank: " + gameProgress.bank, new Label.LabelStyle(common.createBoldFont(24), com.badlogic.gdx.graphics.Color.YELLOW));
         mainTable.add(bankLabel).expandX().center().padTop(20).row();
 
-        // Create content table and scroll pane
         contentTable = new Table();
         scrollPane = new ScrollPane(contentTable);
         scrollPane.setScrollingDisabled(true, false);
 
-        // Position the scroll pane within the background image
         mainTable.add(scrollPane).width(WINDOW_WIDTH * 0.9f).height(WINDOW_HEIGHT * 0.6f).expand().center().padTop(20).row();
 
-        // Navigation buttons
         Table buttonTable = new Table();
         ImageButton backButton = createIconButton("ui/components/button/back_btn.png");
         ImageButton shopButton = createIconButton("ui/components/button/ship_btn.png");
@@ -141,7 +135,6 @@ public class WorkshopScreen implements Screen {
         buyButtonStyle.font = common.createBoldFont(20);
         TextButton buyButton = new TextButton("", buyButtonStyle);
 
-        // Add bank icon and cost label to the button
         Image bankIcon = new Image(new Texture(Gdx.files.internal("ui/components/statsbar/bank.png")));
         Label costLabel = new Label(String.valueOf(cost), new Label.LabelStyle(common.createBoldFont(20),
                 gameProgress.bank >= cost ? com.badlogic.gdx.graphics.Color.WHITE : com.badlogic.gdx.graphics.Color.RED));
@@ -164,15 +157,13 @@ public class WorkshopScreen implements Screen {
                     refreshContent();
                     updateBankDisplay();
                 } else {
-                    // Show "Not enough credits" message
                 }
             }
         });
 
-        // Adjust the layout
         itemTable.add(icon).size(80, 80).padLeft(10).padRight(10);
         itemTable.add(nameLabel).expandX().left();
-        itemTable.add(buyButton).size(150, 60).padRight(10);  // Adjust size as needed
+        itemTable.add(buyButton).size(150, 60).padRight(10);
 
         contentTable.add(itemTable).width(WINDOW_WIDTH * 0.85f).pad(10).row();
     }
