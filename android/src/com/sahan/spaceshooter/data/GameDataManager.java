@@ -57,7 +57,7 @@ public class GameDataManager {
         prefs.putString(KEY_COMPLETED_MISSIONS, "Asteroid Field");
         prefs.putInteger(KEY_BANK, bank);
         prefs.putInteger(KEY_SCORE, 0);
-        prefs.putInteger(KEY_LIVES, 3);
+        prefs.putInteger(KEY_LIVES, 4);
         prefs.putInteger(KEY_POWER_LEVEL,0);
         prefs.putInteger(KEY_POWER_UP_POINTS, 0);
         prefs.putString(KEY_PLAYER_UPGRADES, json.toJson(upgrades));

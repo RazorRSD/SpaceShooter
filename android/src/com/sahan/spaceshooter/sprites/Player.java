@@ -269,14 +269,14 @@ public class Player {
         Array<Bullet> bullets = new Array<>();
         switch (currentBulletType) {
             case B1:
-                bullets.add(new Bullet(position.x + getWidth() / 2, position.y + getHeight(), 300, BulletType.B1, 1f));
+                bullets.add(new Bullet(position.x + getWidth(), position.y + getHeight(), 300, BulletType.B1, 1f));
                 break;
             case B2_DOUBLE:
-                bullets.add(new Bullet(position.x + getWidth() / 4, position.y + getHeight(), 300, BulletType.B1, 1f));
-                bullets.add(new Bullet(position.x + getWidth() * 3 / 4, position.y + getHeight(), 300, BulletType.B1, 1f));
+                bullets.add(new Bullet(position.x + getWidth() / 2, position.y + getHeight(), 300, BulletType.B1, 1f));
+                bullets.add(new Bullet(position.x + getWidth() * 3 / 2, position.y + getHeight(), 300, BulletType.B1, 1f));
                 break;
             case B2_ANGLE:
-                bullets.add(new Bullet(position.x + getWidth() / 2, position.y + getHeight(), 300, BulletType.B1, 1f));
+                bullets.add(new Bullet(position.x + getWidth(), position.y + getHeight(), 300, BulletType.B1, 1f));
                 Bullet leftBullet = new Bullet(position.x, position.y + getHeight(), 300, BulletType.B1, 1f);
                 leftBullet.getVelocity().rotate(15);
                 bullets.add(leftBullet);

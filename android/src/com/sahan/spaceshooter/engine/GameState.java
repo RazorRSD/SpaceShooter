@@ -89,18 +89,6 @@ public class GameState {
         waveNumberTexture = new Texture(Gdx.files.internal("ui/components/statsbar/wavenumber.png"));
 
         statBarRegion = new TextureRegion(statBarTexture, 6, 6, 1068, 68);
-        reset();
-    }
-
-    public void reset() {
-        playerHealth = 100;
-        lives = 3;
-        score = 0;
-        bank = 0;
-        powerLevel = 0;
-        currentWave = 0;
-        currentMission = "Mission 1";
-        gameOver = false;
     }
 
     public void setMissionManager(MissionManager missionManager) {
@@ -156,7 +144,6 @@ public class GameState {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.setScreen(new MenuScreen(game));
-//                currentDialog.result("menu");
             }
         });
         buttonTable.add(menuButton).size(400, 100).pad(20);
@@ -270,7 +257,9 @@ public class GameState {
     private void renderHealthBar(SpriteBatch batch) {
         batch.draw(healthBarTexture, 10, Gdx.graphics.getHeight() - 165);
         int maxHealth = player.getMaxHealth();
-        int numDots = (playerHealth / maxHealth) * 10;
+        float healthPercentage =  ((float)playerHealth / (float)maxHealth) * 10f;
+        int numDots = (int) healthPercentage;
+        Log.d("HealthBar","numdot"+numDots + "f: "+ healthPercentage + " playerH: "+ playerHealth + " maxHealth: "+ maxHealth);
         float dotWidth = healthDotTexture.getWidth() + 3;
         for (int i = 0; i < numDots; i++) {
             batch.draw(healthDotTexture, 16 + i * dotWidth, Gdx.graphics.getHeight() - 159);

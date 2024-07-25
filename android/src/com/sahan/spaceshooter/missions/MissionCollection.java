@@ -51,6 +51,22 @@ public class MissionCollection {
                 () -> WaveCollection.updateWave1(entityManager.getEnemies())
         ));
         mission2.waves.add(new Wave(
+                () -> WaveCollection.spawnWave1(entityManager),
+                () -> WaveCollection.updateWave1(entityManager.getEnemies())
+        ));
+        mission2.waves.add(new Wave(
+                () -> WaveCollection.spawnWave1(entityManager),
+                () -> WaveCollection.updateWave1(entityManager.getEnemies())
+        ));
+        mission2.waves.add(new Wave(
+                () -> WaveCollection.spawnWave2(entityManager),
+                () -> WaveCollection.updateWave2(entityManager.getEnemies())
+        ));
+        mission2.waves.add(new Wave(
+                () -> WaveCollection.spawnWave2(entityManager),
+                () -> WaveCollection.updateWave2(entityManager.getEnemies())
+        ));
+        mission2.waves.add(new Wave(
                 () -> WaveCollection.spawnWave2(entityManager),
                 () -> WaveCollection.updateWave2(entityManager.getEnemies())
         ));

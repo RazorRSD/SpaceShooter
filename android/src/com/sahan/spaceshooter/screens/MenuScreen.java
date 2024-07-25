@@ -74,9 +74,17 @@ public class MenuScreen implements Screen {
 
         if(gameDataManager.hasSavedGame()) {
             continueButton = common.createPlasticButton("Continue", game.skin);
-            startButton = common.createPlasticButton("New Game", game.skin);
-            table.add(startButton).size(600, 200).padBottom(20).row();
+            TextButton newGameButton = common.createPlasticButton("New Game", game.skin);
             table.add(continueButton).size(600, 200).padBottom(20).row();
+            table.add(newGameButton).size(600, 200).padBottom(20).row();
+
+            newGameButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    restartNewGame();
+                    dispose();
+                }
+            });
 
             continueButton.addListener(new ChangeListener() {
                 @Override
@@ -85,15 +93,25 @@ public class MenuScreen implements Screen {
                     dispose();
                 }
             });
-        }else {
+        }
+        else {
             startButton = common.createPlasticButton("Start", game.skin);
             table.add(startButton).size(600, 200).padBottom(20).row();
+            startButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    startNewGame();
+                    dispose();
+                }
+            });
         }
 
         TextButton workshopButton = common.createPlasticButton("workshop", game.skin);
         TextButton aboutButton = common.createPlasticButton("About", game.skin);
+        TextButton helpButton = common.createPlasticButton("Help", game.skin);
 
         table.add(workshopButton).size(600, 200).padBottom(20).row();
+        table.add(helpButton).size(600, 200).padBottom(20).row();
         table.add(aboutButton).size(600, 200);
 
         backgroundSprite = new Sprite(backgroundTexture);
@@ -125,18 +143,11 @@ public class MenuScreen implements Screen {
             }
         });
 
-        startButton.addListener(new ChangeListener() {
+        helpButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                startNewGame();
+                game.setScreen(new HelpScreen(game));
                 dispose();
-            }
-        });
-
-        workshopButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                // TODO: Implement workshop screen logic
             }
         });
 
@@ -162,6 +173,11 @@ public class MenuScreen implements Screen {
     public void startNewGame() {
         GameProgress progress = new GameProgress("Asteroid Field", 0,0,3, 0, 0, new PlayerUpgrades());
         game.setScreen(new GameScreen(game, progress));
+    }
+
+    public void restartNewGame () {
+        GameProgress gameProgress = gameDataManager.loadGameProgress();
+        gameDataManager.resetGameProgress(gameProgress.bank, gameProgress.upgrades);
     }
 
     @Override
